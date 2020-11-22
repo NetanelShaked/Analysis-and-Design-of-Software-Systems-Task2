@@ -34,4 +34,17 @@ public class Group implements ITestable {
     public static boolean checkAllIntancesConstraints(Model model){
         return true;
     }
+
+    private boolean constrain1() {
+        for (Hotel hotel1 : hotels) {
+            for (Hotel hotel2 : hotels) {
+                if (hotel1.getCity() == hotel2.getCity()) {
+                    if (hotel1 != hotel2) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }

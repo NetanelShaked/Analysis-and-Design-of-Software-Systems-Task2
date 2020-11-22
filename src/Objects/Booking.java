@@ -64,4 +64,16 @@ public class Booking implements ITestable {
     public static boolean checkAllIntancesConstraints(Model model){
         return true;
     }
+
+    public boolean section_9(){
+        if(services == null)
+            return true;
+        for (HotelService hs : services){
+            if(hs == null )
+                continue;
+            if(hs.getService() instanceof VipService )
+                return this.review != null;
+        }
+        return true;
+    }
 }
