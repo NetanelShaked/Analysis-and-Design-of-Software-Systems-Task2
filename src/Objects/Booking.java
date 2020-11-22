@@ -62,6 +62,12 @@ public class Booking implements ITestable {
     }
 
     public static boolean checkAllIntancesConstraints(Model model){
+        for (Hotel hotel:
+             model.HotelAllInstances()) {
+            if (!hotel.checkConstraints()){
+                return false;
+            }
+        }
         return true;
     }
 

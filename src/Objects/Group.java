@@ -1,6 +1,7 @@
 package Objects;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class Group implements ITestable {
     private int groupId;
@@ -47,4 +48,13 @@ public class Group implements ITestable {
         }
         return true;
     }
+
+    public boolean constrain3(){
+        Set<Service> allServices = hotels.iterator().next().getServices().keySet();
+        for (Hotel hotel: hotels){
+            if (!(hotel.getServices().keySet().equals(allServices)))
+                return false;
+        }
+        return true;}
+
 }

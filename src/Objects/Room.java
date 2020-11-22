@@ -1,5 +1,6 @@
 package Objects;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -45,6 +46,18 @@ public class Room implements  ITestable{
     }
 
     public static boolean checkAllIntancesConstraints(Model model){
+        return true;
+    }
+
+    public boolean constains4_8 (){
+        Collection<Booking> allBookings = bookings.values();
+        for (Booking booking : allBookings) {
+            Hotel bookedHotel = booking.getReservation().getReservationSet().getHotel();
+            RoomCategory.RoomType reservedType = booking.getReservation().getRoomCategory().getType();
+            RoomCategory.RoomType bookedType = roomCategory.getType();
+            if (!bookingIsValid(reservedType,bookedType) || hotel!=bookedHotel)
+                return false;
+        }
         return true;
     }
 }

@@ -79,6 +79,9 @@ public class Hotel implements ITestable {
         for (HotelService hotelService1 : this.services.values()) {
             for (HotelService hotelService2 : this.services.values()) {
                 if (hotelService1 != hotelService2) {
+                    if (hotelService1.getService().getServiceName()==null || hotelService2.getService().getServiceName()==null){
+                        continue;
+                    }
                     if (hotelService1.getService().getServiceName().equals(hotelService2.getService().getServiceName())) {
                         return false;
                     }
@@ -88,12 +91,12 @@ public class Hotel implements ITestable {
         return true;
     }
 
-    private boolean constraint2(){
-        for (ReservationSet reservationSet : this.allReservation.values()){
-            if(reservationSet.getReservations().size() >= 5){
+    private boolean constraint2() {
+        for (ReservationSet reservationSet : this.allReservation.values()) {
+            if (reservationSet.getReservations().size() >= 5) {
                 boolean exist = false;
-                for(Reservation reservation : reservationSet.getReservations()){
-                    if(reservation.getRoomCategory().getType() == RoomCategory.RoomType.VIP)
+                for (Reservation reservation : reservationSet.getReservations()) {
+                    if (reservation.getRoomCategory().getType() == RoomCategory.RoomType.VIP)
                         exist = true;
                 }
                 if (!exist) return false;
@@ -107,12 +110,14 @@ public class Hotel implements ITestable {
         for (HotelService hotelService : this.services.values()) {
             for (Booking booking : hotelService.getGivenServices()
             ) {
-                years.add(booking.getDate().getYear());
+                if (booking.getDate()!=null){
+                    years.add(booking.getDate().getYear());
+                }
             }
         }
         for (Integer year : years) {
-            if (sum_Array_list(help_function_section_12_get_hotelService_by_year(year)) < sum_Array_list(help_function_section_12_get_hotelService_by_year(year - 1))){
-                if (help_function_section_12_get_hotelService_by_year(year).size()!=0){
+            if (sum_Array_list(help_function_section_12_get_hotelService_by_year(year)) < sum_Array_list(help_function_section_12_get_hotelService_by_year(year - 1))) {
+                if (help_function_section_12_get_hotelService_by_year(year).size() != 0) {
                     return false;
                 }
             }
@@ -143,32 +148,35 @@ public class Hotel implements ITestable {
         return result;
     }
 
-    public boolean constrain7(){
-        if (this.city.toLowerCase().equals("las vegas")){
-            if(this.allReservation == null)
+    public boolean constrain7() {
+        if (this.city.toLowerCase().equals("las vegas")) {
+            if (this.allReservation == null)
                 return true;
             for (Client c1 : this.allReservation.keySet()) {
-                if(c1 == null)
+                if (c1 == null)
                     return true;
-                if (!(c1.getAge()>=21))
+                if (!(c1.getAge() >= 21))
                     return false;
             }
         }
         return true;
     }
-    public boolean constrain10(){
+
+    public boolean section_10() {
         float sum = 0;
         int counter = 0;
-        if(this.rate == 5){
-            for(ReservationSet rs :this.allReservation.values()){
-                for(Reservation r : rs.getReservations()){
-                    sum += r.getBookings().getReview().getRank();
-                    counter++;
+        if (this.rate == 5) {
+            for (ReservationSet rs : this.allReservation.values()) {
+                for (Reservation r : rs.getReservations()) {
+                    if (r.getBookings().getReview() != null) {
+                        sum += r.getBookings().getReview().getRank();
+                        counter++;
+                    }
                 }
             }
-            return (sum/counter) > 7.5;
+            return (sum / counter) > 7.5;
         }
         return true;
-    }
 
+    }
 }
