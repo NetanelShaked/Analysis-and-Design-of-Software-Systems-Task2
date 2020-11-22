@@ -60,4 +60,9 @@ public class Room implements  ITestable{
         }
         return true;
     }
+    private boolean bookingIsValid(RoomCategory.RoomType reservedType, RoomCategory.RoomType bookedType){
+        return (!(bookedType != reservedType || (bookedType.toString().equals("BASIC") && reservedType.toString().equals("SUITE")) ||
+                (bookedType.toString().equals("BASIC") && reservedType.toString().equals("VIP")) ||
+                (bookedType.toString().equals("SUITE") && reservedType.toString().equals("VIP"))));
+    }
 }
