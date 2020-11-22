@@ -1,6 +1,8 @@
 package Objects;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Service implements ITestable{
 
@@ -31,6 +33,19 @@ public abstract class Service implements ITestable{
     }
 
     public static boolean checkAllIntancesConstraints(Model model){
+        Set<Service> services=new HashSet<>();
+        for (HotelService hotelService:model.HotelServiceAllInstances()
+             ) {
+            if(hotelService.getService()!=null) {
+                services.add(hotelService.getService());
+            }
+        }
+        for (Service service:services
+             ) {
+            if(!service.checkConstraints()){
+                return false;
+            }
+        }
         return true;
     }
 }
