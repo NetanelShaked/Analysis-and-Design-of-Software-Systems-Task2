@@ -68,7 +68,7 @@ public class Hotel implements ITestable {
 
     @Override
     public boolean checkConstraints() {
-        return this.constrain7() && constraint2() && constrain11() && constrain12()&& constrain_10();
+        return this.constrain7() && constraint2() && constrain11() && constrain12() && constrain_10();
     }
 
     public static boolean checkAllIntancesConstraints(Model model) {
@@ -122,7 +122,7 @@ public class Hotel implements ITestable {
         }
         for (Integer year : years) {
             if (sum_Array_list(help_function_section_12_get_hotelService_by_year(year)) < sum_Array_list(help_function_section_12_get_hotelService_by_year(year - 1))) {
-                if (help_function_section_12_get_hotelService_by_year(year).size() != 0) {
+                if (help_function_section_12_get_hotelService_by_year(year-1).size() != 0) {
                     return false;
                 }
             }
@@ -173,6 +173,7 @@ public class Hotel implements ITestable {
         if (this.rate == 5) {
             for (ReservationSet rs : this.allReservation.values()) {
                 for (Reservation r : rs.getReservations()) {
+                    if (r == null || r.getBookings() == null) continue;
                     if (r.getBookings().getReview() != null) {
                         sum += r.getBookings().getReview().getRank();
                         counter++;
