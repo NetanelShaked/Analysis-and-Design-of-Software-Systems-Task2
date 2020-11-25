@@ -3,22 +3,25 @@ package Objects;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
-public class Room implements  ITestable{
+public class Room implements ITestable {
     private RoomCategory roomCategory;
-    private HashMap<Date,Booking> bookings;
+    private HashMap<Date, Booking> bookings;
     private int number;
     private Hotel hotel;
 
 
-    public Room(int number){
+    public Room(int number) {
         this.number = number;
-        bookings = new HashMap<Date,Booking>();
+        bookings = new HashMap<Date, Booking>();
     }
 
-    public void setHotel(Hotel h){ hotel = h; }
+    public void setHotel(Hotel h) {
+        hotel = h;
+    }
 
-    public void asignRoomCategory(RoomCategory roomCategory){
+    public void asignRoomCategory(RoomCategory roomCategory) {
         this.roomCategory = roomCategory;
     }
 
@@ -38,31 +41,58 @@ public class Room implements  ITestable{
         return number;
     }
 
-    public Hotel getHotel(){ return hotel; }
+    public Hotel getHotel() {
+        return hotel;
+    }
 
     @Override
     public boolean checkConstraints() {
-        return true;
+        return constains4_8();
     }
 
-    public static boolean checkAllIntancesConstraints(Model model){
-        return true;
+    public static boolean checkAllIntancesConstraints(Model model) {
+        for (Room room : model.RoomAllInstances()) {
+            if (!room.checkConstraints()) {
+                return false;
+            }
+        }
+        return Room.constraint_5(model);
     }
 
-    public boolean constains4_8 (){
+    public boolean constains4_8() {
         Collection<Booking> allBookings = bookings.values();
         for (Booking booking : allBookings) {
             Hotel bookedHotel = booking.getReservation().getReservationSet().getHotel();
             RoomCategory.RoomType reservedType = booking.getReservation().getRoomCategory().getType();
             RoomCategory.RoomType bookedType = roomCategory.getType();
-            if (!bookingIsValid(reservedType,bookedType) || hotel!=bookedHotel)
+            if (!bookingIsValid(reservedType, bookedType) || hotel != bookedHotel)
                 return false;
         }
         return true;
     }
-    private boolean bookingIsValid(RoomCategory.RoomType reservedType, RoomCategory.RoomType bookedType){
+
+    private boolean bookingIsValid(RoomCategory.RoomType reservedType, RoomCategory.RoomType bookedType) {
         return (!(bookedType != reservedType || (bookedType.toString().equals("BASIC") && reservedType.toString().equals("SUITE")) ||
                 (bookedType.toString().equals("BASIC") && reservedType.toString().equals("VIP")) ||
                 (bookedType.toString().equals("SUITE") && reservedType.toString().equals("VIP"))));
+    }
+
+    public static boolean constraint_5(Model model) {
+        // constraint 5
+        HashSet<RoomCategory> roomCategories = model.RoomCategoryAllInstances();
+        for (RoomCategory r : roomCategories
+        ) {
+            if (r.getType() == RoomCategory.RoomType.VIP) {
+                for (Reservation res : r.reservations
+                ) {
+                    for (HotelService hotelService : res.getBookings().getServices()
+                    ) {
+                        if (!hotelService.getService().getClass().getCanonicalName().equals("VipService"))
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

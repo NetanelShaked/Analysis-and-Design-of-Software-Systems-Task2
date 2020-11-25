@@ -12,23 +12,25 @@ public class Booking implements ITestable {
     private Review review;
 
 
-    public Booking(Date a_date, Room a_room){
+    public Booking(Date a_date, Room a_room) {
         date = a_date;
         room = a_room;
         services = new ArrayList<HotelService>();
     }
 
-    public void addService(HotelService s){
+    public void addService(HotelService s) {
         services.add(s);
     }
 
-    public void addReview(Review a_review) {review  = a_review; }
+    public void addReview(Review a_review) {
+        review = a_review;
+    }
 
-    public void addReservation(Reservation r){
+    public void addReservation(Reservation r) {
         reservation = r;
     }
 
-    public void assignRoom(Room room){
+    public void assignRoom(Room room) {
         this.room = room;
     }
 
@@ -58,27 +60,40 @@ public class Booking implements ITestable {
 
     @Override
     public boolean checkConstraints() {
-        return true;
+        return constrain_9() && constraint_13();
     }
 
-    public static boolean checkAllIntancesConstraints(Model model){
-        for (Hotel hotel:
-             model.HotelAllInstances()) {
-            if (!hotel.checkConstraints()){
+    public static boolean checkAllIntancesConstraints(Model model) {
+        for (Hotel hotel :
+                model.HotelAllInstances()) {
+            if (!hotel.checkConstraints()) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean section_9(){
-        if(services == null)
+    public boolean constrain_9() {
+        if (services == null)
             return true;
-        for (HotelService hs : services){
-            if(hs == null )
+        for (HotelService hs : services) {
+            if (hs == null)
                 continue;
-            if(hs.getService() instanceof VipService )
+            if (hs.getService() instanceof VipService)
                 return this.review != null;
+        }
+        return true;
+    }
+
+    public boolean constraint_13() {
+        if (getServices().size() == 0)
+            return true;
+        for (HotelService hs : getServices()
+        ) {
+            if (hs.getHotel().getName() != getReservation().getReservationSet().getHotel().getName())
+                return false;
+
+
         }
         return true;
     }

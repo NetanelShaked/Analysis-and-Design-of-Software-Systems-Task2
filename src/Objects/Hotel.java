@@ -68,18 +68,23 @@ public class Hotel implements ITestable {
 
     @Override
     public boolean checkConstraints() {
-        return true;
+        return this.constrain7() && constraint2() && constrain11() && constrain12()&& constrain_10();
     }
 
     public static boolean checkAllIntancesConstraints(Model model) {
-        return true;
+        for (Hotel hotel : model.HotelAllInstances()) {
+            if (!hotel.checkConstraints()) {
+                return false;
+            }
+        }
+        return Hotel.constain_6(model);
     }
 
     public boolean constrain11() {
         for (HotelService hotelService1 : this.services.values()) {
             for (HotelService hotelService2 : this.services.values()) {
                 if (hotelService1 != hotelService2) {
-                    if (hotelService1.getService().getServiceName()==null || hotelService2.getService().getServiceName()==null){
+                    if (hotelService1.getService().getServiceName() == null || hotelService2.getService().getServiceName() == null) {
                         continue;
                     }
                     if (hotelService1.getService().getServiceName().equals(hotelService2.getService().getServiceName())) {
@@ -110,7 +115,7 @@ public class Hotel implements ITestable {
         for (HotelService hotelService : this.services.values()) {
             for (Booking booking : hotelService.getGivenServices()
             ) {
-                if (booking.getDate()!=null){
+                if (booking.getDate() != null) {
                     years.add(booking.getDate().getYear());
                 }
             }
@@ -162,7 +167,7 @@ public class Hotel implements ITestable {
         return true;
     }
 
-    public boolean section_10() {
+    public boolean constrain_10() {
         float sum = 0;
         int counter = 0;
         if (this.rate == 5) {
@@ -178,5 +183,28 @@ public class Hotel implements ITestable {
         }
         return true;
 
+    }
+
+    public static boolean constain_6(Model model) {
+        HashSet<Hotel> hotels = model.HotelAllInstances();
+        for (Hotel hotel : hotels
+        ) {
+            int roomCount = hotel.rooms.size();
+            if (roomCount == 0)
+                continue;
+            int vipRoomsCount = 0;
+            for (Room room : hotel.rooms.values()
+            ) {
+                if (room.getRoomCategory().getType() == RoomCategory.RoomType.VIP)
+                    vipRoomsCount += 1;
+
+
+            }
+            if (0.1 <= (vipRoomsCount / roomCount))
+                return false;
+
+
+        }
+        return true;
     }
 }
