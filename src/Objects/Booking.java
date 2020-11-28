@@ -74,7 +74,7 @@ public class Booking implements ITestable {
     }
 
     public boolean constrain_9() {
-        if (services == null)
+        if (services.size() == 0)
             return true;
         for (HotelService hs : services) {
             if (hs == null)

@@ -155,7 +155,7 @@ public class Hotel implements ITestable {
 
     public boolean constrain7() {
         if (this.city.toLowerCase().equals("las vegas")) {
-            if (this.allReservation == null)
+            if (this.allReservation.size() == 0)
                 return true;
             for (Client c1 : this.allReservation.keySet()) {
                 if (c1 == null)
@@ -171,19 +171,22 @@ public class Hotel implements ITestable {
         float sum = 0;
         int counter = 0;
         if (this.rate == 5) {
+            if(this.allReservation.size() == 0)
+                return true;
             for (ReservationSet rs : this.allReservation.values()) {
+                if(rs.getReservations().size() == 0)
+                    continue;
                 for (Reservation r : rs.getReservations()) {
-                    if (r == null || r.getBookings() == null) continue;
-                    if (r.getBookings().getReview() != null) {
+                    if (r.getBookings() != null && r.getBookings().getReview() != null) {
                         sum += r.getBookings().getReview().getRank();
                         counter++;
                     }
                 }
             }
-            return (sum / counter) > 7.5;
+            if (counter > 0)
+                return (sum / counter) > 7.5;
         }
         return true;
-
     }
 
     public static boolean constain_6(Model model) {
