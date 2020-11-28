@@ -68,7 +68,7 @@ public class Hotel implements ITestable {
 
     @Override
     public boolean checkConstraints() {
-        return this.constrain7() && constraint2() && constrain11() && constrain12() && constrain_10();
+        return this.constrain7() && constraint2() && constrain11() && constrain12() && constrain_10() && constrain_6();
     }
 
     public static boolean checkAllIntancesConstraints(Model model) {
@@ -77,7 +77,7 @@ public class Hotel implements ITestable {
                 return false;
             }
         }
-        return Hotel.constain_6(model);
+        return true;
     }
 
     public boolean constrain11() {
@@ -189,26 +189,27 @@ public class Hotel implements ITestable {
         return true;
     }
 
-    public static boolean constain_6(Model model) {
-        HashSet<Hotel> hotels = model.HotelAllInstances();
-        for (Hotel hotel : hotels
+    public boolean constrain_6() {
+        if (this.rooms.isEmpty()){
+            return true;
+        }
+        float roomCount = this.rooms.size();
+
+        if (roomCount == 0)
+            return true;
+        float vipRoomsCount = 0;
+        for (Room room:this.rooms.values()
         ) {
-            int roomCount = hotel.rooms.size();
-            if (roomCount == 0)
-                continue;
-            int vipRoomsCount = 0;
-            for (Room room : hotel.rooms.values()
-            ) {
-                if (room.getRoomCategory().getType() == RoomCategory.RoomType.VIP)
-                    vipRoomsCount += 1;
-
-
-            }
-            if (0.1 <= (vipRoomsCount / roomCount))
-                return false;
+            if (room.getRoomCategory().getType() == RoomCategory.RoomType.VIP)
+                vipRoomsCount += 1;
 
 
         }
+        float check = (vipRoomsCount/roomCount);
+        System.out.println(check);
+        if (0.1 <= (check)){
+            return false;}
         return true;
+
     }
 }

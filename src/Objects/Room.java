@@ -47,7 +47,7 @@ public class Room implements ITestable {
 
     @Override
     public boolean checkConstraints() {
-        return constains4_8();
+        return constains4_8()&& constraint_5();
     }
 
     public static boolean checkAllIntancesConstraints(Model model) {
@@ -56,7 +56,7 @@ public class Room implements ITestable {
                 return false;
             }
         }
-        return Room.constraint_5(model);
+        return true;
     }
 
     public boolean constains4_8() {
@@ -77,19 +77,15 @@ public class Room implements ITestable {
                 (bookedType.toString().equals("SUITE") && reservedType.toString().equals("VIP"))));
     }
 
-    public static boolean constraint_5(Model model) {
+    public  boolean constraint_5() {
         // constraint 5
-        HashSet<RoomCategory> roomCategories = model.RoomCategoryAllInstances();
-        for (RoomCategory r : roomCategories
+        Collection<Booking> allBookings = bookings.values();
+        for (Booking bo : allBookings
         ) {
-            if (r.getType() == RoomCategory.RoomType.VIP) {
-                for (Reservation res : r.reservations
-                ) {
-                    for (HotelService hotelService : res.getBookings().getServices()
-                    ) {
-                        if (!hotelService.getService().getClass().getCanonicalName().equals("VipService"))
-                            return false;
-                    }
+            for (HotelService hs : bo.getServices()) {
+                if (!(hs.getService() instanceof VipService)) {
+                    return false;
+
                 }
             }
         }
