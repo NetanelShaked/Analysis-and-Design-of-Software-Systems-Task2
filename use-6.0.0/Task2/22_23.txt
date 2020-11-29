@@ -1,0 +1,10 @@
+context Hotel
+inv section_22:
+self.hotelService.service -> forAll(s1,s2:Service|s1<>s2 implies s1.serviceName<>s2.serviceName)
+
+	 
+context Hotel
+inv section_23: 
+let years=self.hotelService.booking.date.year -> asSet()
+in 
+years->forAll(y:Integer | self.hotelService.booking->select(b:Booking| b.date.year=y).hotelService.price->sum()> self.hotelService.booking->select(b:Booking| b.date.year=y-1).hotelService.price->sum() or  self.hotelService.booking->select(b:Booking| b.date.year=y-1).hotelService.price-> isEmpty() )		

@@ -44,7 +44,7 @@ public class Group implements ITestable {
     private boolean constrain1() {
         for (Hotel hotel1 : hotels) {
             for (Hotel hotel2 : hotels) {
-                if (hotel1.getCity() == hotel2.getCity()) {
+                if (hotel1.getCity().equals(hotel2.getCity())) {
                     if (hotel1 != hotel2) {
                         return false;
                     }
@@ -55,10 +55,14 @@ public class Group implements ITestable {
     }
 
     public boolean constrain3() {
-        Set<Service> allServices = hotels.iterator().next().getServices().keySet();
-        for (Hotel hotel : hotels) {
-            if (!(hotel.getServices().keySet().equals(allServices)))
-                return false;
+        Set<Service> allServices = null;
+        if (!hotels.isEmpty())
+            allServices = hotels.iterator().next().getServices().keySet();
+        if (allServices != null) {
+            for (Hotel hotel : hotels) {
+                if (!(hotel.getServices().keySet().equals(allServices)))
+                    return false;
+            }
         }
         return true;
     }

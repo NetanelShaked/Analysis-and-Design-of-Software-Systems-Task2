@@ -88,14 +88,9 @@ public class Booking implements ITestable {
     public boolean constraint_13() {
         if (getServices().size() == 0)
             return true;
-        if (getServices() == null)
-            return true;
-        for (HotelService hs : getServices()
-        ) {
-            if (hs.getHotel().getName() != getReservation().getReservationSet().getHotel().getName())
+        for (HotelService hs : getServices()) {
+            if (hs.getHotel() != getReservation().getReservationSet().getHotel())
                 return false;
-
-
         }
         return true;
     }
