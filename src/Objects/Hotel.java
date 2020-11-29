@@ -205,9 +205,10 @@ public class Hotel implements ITestable {
 
 
         }
-        float check = (vipRoomsCount/roomCount);
-        if (0.1 > (check)){
-            return false;}
+        float check = Math.round(vipRoomsCount/roomCount);
+        if (0.1 < check){
+            return false;
+        }
         return true;
 
     }
